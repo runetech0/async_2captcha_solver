@@ -2,9 +2,6 @@ import setuptools
 import sys
 
 required_packages = ["aiohttp",
-                     "requests",
-                     "requests_toolbelt",
-                     "aiofiles"
                      ]
 
 
@@ -13,8 +10,8 @@ setuptools.setup(
     version="1.0",
     author="Rehman Ali",
     author_email="rehmanali.9442289@gmail.com",
-    description="A discord API v9 wrapper for python",
-    url="https://github.com/rehmanali1337/discord_api",
+    description="An async API wrapper for official 2captcha.com API in python",
+    url="https://github.com/rehmanali1337/async_2captcha_wrapper",
     packages=setuptools.find_packages(),
     install_requires=required_packages
 )

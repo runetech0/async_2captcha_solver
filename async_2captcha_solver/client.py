@@ -1,4 +1,3 @@
-from distutils.log import debug
 import aiohttp
 import asyncio
 from . import errors
