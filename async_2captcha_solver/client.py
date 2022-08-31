@@ -2,21 +2,32 @@ import aiohttp
 import asyncio
 from . import errors
 from urllib import parse
+import json
+from .logger import logger, console_handler, file_handler, log_filename
+import os
 
 
 class Client:
-    def __init__(self, api_key, debug=False) -> None:
+    def __init__(self, api_key, debug=False, server_debug=False) -> None:
         self.api_key = api_key
         self._base = "http://2captcha.com"
         self._session = None
+        self.server_debug = server_debug
         self.debug = debug
+        if not self.debug:
+            logger.removeHandler(file_handler)
+            logger.removeHandler(console_handler)
+            try:
+                os.remove(log_filename)
+            except:
+                pass
 
     def escape(self, value: str):
         return parse.quote(str(value).encode("UTF-8"))
 
     def _param_dict_parse(self, params: dict):
         parsed = f"key={self.api_key}&json=1"
-        if self.debug:
+        if self.server_debug:
             parsed = f"{parsed}&debug_dump=1"
         for k, v in params.items():
             if parsed != "":
@@ -30,8 +41,13 @@ class Client:
             self._session = aiohttp.ClientSession()
         url = f"{self._base}{path}?{self._param_dict_parse(params)}"
         r = await self._session.request(method=method, url=url)
+        logger.debug(f"[{method}]{url} returned {await r.text()}")
         if r.status == 200:
-            return await r.json()
+            try:
+                return await r.json()
+            except json.decoder.JSONDecodeError:
+                raise errors.CaptchaError(f"2captcha.com says: {await r.text()}", 0)
+                return await r.text()
 
     async def solve_hcaptcha(self, site_key: str,
                              page_url: str,
