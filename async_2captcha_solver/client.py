@@ -90,6 +90,7 @@ class Client:
         }
         while True:
             r = await self._request(path, params, "GET")
+            print(r)
             status = r.get("status")
             response = r.get("request")
             if status == 1:
@@ -98,3 +99,27 @@ class Client:
             if response == "ERROR_CAPTCHA_UNSOLVABLE":
                 raise errors.CaptchaUnsolvable(response, 400)
             await asyncio.sleep(5)
+
+    async def solve_funcaptcha(self,
+                               publickey: str,
+                               surl="https://client-api.arkoselabs.com",
+                               pageurl="https://twitter.com/account/access",
+                               wait_for_solve=False
+                               ):
+        path = "/in.php"
+        params = {
+            "method": "funcaptcha",
+            "publickey": publickey,
+            "surl": surl,
+            "pageurl": pageurl,
+        }
+        r = await self._request(path, params, method="POST")
+        print(r)
+        if r.get("status") == 1:
+            req_id = r.get("request")
+            if wait_for_solve:
+                try:
+                    return await self.wait_for_captcha_solve(req_id)
+                except errors.CaptchaUnsolvable:
+                    return await self.solve_funcaptcha(publickey, surl, pageurl, wait_for_solve)
+            return req_id
