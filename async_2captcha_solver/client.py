@@ -49,6 +49,11 @@ class Client:
                 raise errors.CaptchaError(f"2captcha.com says: {await r.text()}", 0)
                 return await r.text()
 
+    async def close(self):
+        if self._session is not None:
+            if not self._session.closed:
+                return await self._session.close()
+
     async def solve_hcaptcha(self, site_key: str,
                              page_url: str,
                              rq_data: str,
@@ -90,7 +95,6 @@ class Client:
         }
         while True:
             r = await self._request(path, params, "GET")
-            print(r)
             status = r.get("status")
             response = r.get("request")
             if status == 1:
