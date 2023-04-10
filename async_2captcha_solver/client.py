@@ -11,7 +11,7 @@ class Client:
     def __init__(self, api_key, debug=False, server_debug=False) -> None:
         self.api_key = api_key
         self._base = "http://2captcha.com"
-        self._session = None
+        self._session = aiohttp.ClientSession()
         self.server_debug = server_debug
         self.debug = debug
         if not self.debug:
@@ -19,7 +19,7 @@ class Client:
             logger.removeHandler(console_handler)
             try:
                 os.remove(log_filename)
-            except:
+            except Exception:
                 pass
 
     def escape(self, value: str):
@@ -65,7 +65,7 @@ class Client:
         params = {
             "method": "hcaptcha",
             "sitekey": site_key,
-            "pageurl":  page_url,
+            "pageurl": page_url,
             "userAgent": user_agent,
             "data": rq_data,
             "invisible": invisible,
