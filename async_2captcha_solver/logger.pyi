@@ -1,4 +1,4 @@
-from _typeshed import Incomplete
+from _typeshed import Incomplete as Incomplete
 
 max_filesize_in_mbs: int
 log_filename: str
