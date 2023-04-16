@@ -1,5 +1,4 @@
 import setuptools
-import sys
 
 required_packages = ["aiohttp",
                      ]
