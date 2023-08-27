@@ -41,7 +41,7 @@ class Client:
         return parsed
 
     async def _request(self, path: str, params: ParamsDict, method: str) -> Dict[str, Any]:
-        if self._session is None:
+        if not self._session:
             self._session = aiohttp.ClientSession()
         url = f"{self._base}{path}?{self._param_dict_parse(params)}"
         r = await self._session.request(method=method, url=url)
@@ -55,9 +55,8 @@ class Client:
         raise errors.CaptchaError(f"Unexpected response. {await r.text()}", r.status)
 
     async def close(self) -> None:
-        if self._session is not None:
-            if not self._session.closed:
-                return await self._session.close()
+        if self._session and not self._session.closed:
+            return await self._session.close()
 
     async def solve_hcaptcha(
         self,
