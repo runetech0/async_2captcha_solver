@@ -1,0 +1,57 @@
+
+
+[build-system]
+
+
+requires = ["setuptools >= 61.0.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+
+name = "async_2captcha_solver"
+version = "0.1.0"
+description = "An Async wrapper for 2captcha solver API"
+
+
+authors = [
+    {name = "Rune Tech", email = "runetech2024@gmail.com"}
+]
+
+license = { file = "LICENSE" }
+readme = "README.md"
+
+dependencies = [
+    "aiohttp >= 3.10.10", 
+    "aiohttp_socks >= 0.9.0",
+]
+requires-python = ">=3.11"
+
+keywords = ["async", "2captcha", "2captcha.com", "captcha", "solver"]
+
+[project.urls]
+Homepage = "https://github.com/runetech0/proxy-reader"
+github = "https://github.com/runetech0/proxy-reader"
+
+
+[tool.bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCHH"
+commit_message = "bump version {old_version} -> {new_version}"
+tag_message = "{new_version}"
+tag_scope = "default"
+pre_commit_hook = ""
+post_commit_hook = ""
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "version"'
+]
+"async_2captcha_solver/__init__.py" = [
+    "{version}"
+]
+

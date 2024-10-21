@@ -18,3 +18,4 @@ build
 config.toml
 .vscode
 mypy_cache
+*egg*
